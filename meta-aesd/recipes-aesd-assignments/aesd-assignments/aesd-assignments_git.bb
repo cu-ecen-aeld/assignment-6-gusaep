@@ -17,9 +17,7 @@ PV = "1.0+git${SRCPV}"
 # TODO: set to reference a specific commit hash in your assignment repo
 #SRCREV = "f99b82a5d4cb2a22810104f89d4126f52f4dfaba"
 # Yocto does not take the main, it demands a reference
-SRCREV = "888a30a60f9e9f83fb21c356a9364da18ddd1ac1"
-#         888a30a60f9e9f83fb21c356a9364da18ddd1ac1
-#SRCREV = "188a30a60f9e9f83fb21c356a9364da18ddd1ac1"
+SRCREV = "8437a74362bc1cbf44f5c7f78b9655235e0fd34b"
 
 # This sets your staging directory based on WORKDIR, where WORKDIR is defined at 
 # https://docs.yoctoproject.org/ref-manual/variables.html?highlight=workdir#term-WORKDIR
@@ -57,4 +55,10 @@ do_install () {
 	# See example at https://github.com/cu-ecen-aeld/ecen5013-yocto/blob/ecen5013-hello-world/meta-ecen5013/recipes-ecen5013/ecen5013-hello-world/ecen5013-hello-world_git.bb
   install -d ${D}${bindir}
   install -m 0755 ${S}/aesdsocket ${D}${bindir}
+  install -d 644 ${D}${sysconfdir}/init.d
+  install -d 644 ${D}${sysconfdir}/rc5.d
+  install -m 0755 ${S}/aesdsocket-start-stop ${D}${sysconfdir}/init.d/aesdsocket-start-stop
+  # Why the ../ indireciton
+  ln -sf ../init.d/aesdsocket-start-stop ${D}${sysconfdir}/rc5.d/S99aesdsocket # Start
+  ln -sf ../init.d/aesdsocket-start-stop ${D}${sysconfdir}/rc5.d/K99aesdsocket # stop
 }
